@@ -1,0 +1,42 @@
+function zzpython_path()
+{
+export PYTHONPATH=$(pwd);
+echo PYTHONPATH: $PYTHONPATH
+}
+
+
+
+zzaws_temp_session(){
+# aws sts assume-role --role-arn $1 --role-session-name temp
+unset AWS_ACCESS_KEY_ID AWS_SECRET_ACCESS_KEY AWS_SESSION_TOKEN AWS_PROFILE
+echo $1
+echo $2
+export AWS_REGION=us-east-1
+role_arn="arn:aws:iam::${1}:role/${2}"
+
+echo Creating new Session with $role_arn
+temp_role=$(aws sts assume-role \
+                    --role-arn "arn:aws:iam::${1}:role/${2}" \
+                    --role-session-name "temp")
+
+export AWS_ACCESS_KEY_ID=$(echo $temp_role | jq .Credentials.AccessKeyId | xargs)
+export AWS_SECRET_ACCESS_KEY=$(echo $temp_role | jq .Credentials.SecretAccessKey | xargs)
+export AWS_SESSION_TOKEN=$(echo $temp_role | jq .Credentials.SessionToken | xargs)
+
+env | grep -i AWS_
+
+}
+zzaws_credential_clear(){
+unset AWS_ACCESS_KEY_ID AWS_SECRET_ACCESS_KEY AWS_SESSION_TOKEN AWS_PROFILE   
+echo clearing aws variables
+
+env | grep -i AWS_
+}
+zzreal_path(){
+echo $PWD/$1
+}
+zzaws_whoami(){
+
+echo $(aws sts get-caller-identity)
+
+}
