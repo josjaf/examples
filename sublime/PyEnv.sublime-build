@@ -1,0 +1,12 @@
+{
+    "shell_cmd": "export PYTHONPATH=\"$folder\" && ~/.pyenv/versions/3.6.4/bin/python3 -u $file",
+    "working_dir": "$folder",
+    "selector": "source.python",
+    "env": {
+
+            "table_name": "highrisk-dynamo",
+            "PYTHONIOENCODING": "utf-8"
+            }
+
+}
+
