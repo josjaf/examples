@@ -1,3 +1,4 @@
+#!/bin/zsh
 function zzpython_path()
 {
 export PYTHONPATH=$(pwd);
