@@ -34,10 +34,27 @@ echo clearing aws variables
 env | grep -i AWS_
 }
 zzreal_path(){
-echo $PWD/$1
+file=$1
+if [ -e "$file" ]; then
+    echo "File or Directory exists"
+    echo $PWD/$1
+else
+    echo "File does not exist"
+fi
+
 }
 zzaws_whoami(){
 
 echo $(aws sts get-caller-identity)
 
+}
+
+
+
+function zzaws_environment_variables(){
+for var in AWS_PROFILE AWS_ACCESS_KEY_ID AWS_SECRET_ACCESS_KEY AWS_SESSION_TOKEN AWS_DEFAULT_REGION;
+do
+    #echo $var : ${!var}
+    echo $var : ${(P)var}
+done
 }
