@@ -10,5 +10,6 @@ def snake_to_camel(word):
 for line in api_calls:
     if line.startswith("_"): continue
     if line.startswith("waiter"): continue
-    final = "- ec2:{}".format(line)     
+    formatted_api_call = snake_to_camel(line)
+    final = "- ec2:{}".format(formatted_api_call)     
     print(final)
