@@ -12,11 +12,12 @@ def main():
     except ClientError as e:
         # error code example
         if e.response['Error']['Code'] == 'BucketAlreadyExists':
-            print("FAIL - Bucket already Exists")
+            print("Exception: FAIL - Bucket already Exists")
+            raise e
         # error message example
         if 'The requested bucket name is not available.' in e.response['Error']['Message']:
-            print("Requested Bucket Name is not available")
-
+            print("Exception: Requested Bucket Name is not available")
+            raise e
     except Exception as e:
         print(e)
         raise e
