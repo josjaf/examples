@@ -1,0 +1,85 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: Create a role and a cloudwatch event which triggers sns topic when the role is assumed
+Parameters:
+  email:
+    Description: sns email
+    Type: "String"
+Resources:
+  IAMRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Sid: TrustAccountRoot
+            Effect: Allow
+            Principal:
+              AWS:
+                - !Sub "arn:aws:iam::${AWS::AccountId}:root"
+            Action:
+              - sts:AssumeRole
+      Path: /
+  IAMRolePolicies:
+    Type: AWS::IAM::Policy
+
+    Properties:
+      PolicyName: !Sub ${AWS::StackName}-${AWS::Region}
+      PolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Sid: S3
+            Effect: Allow
+            Action:
+            - s3:ListBucket
+            - s3:ListAllMyBuckets
+            - s3:GetBucketLocation
+            Resource: "*"
+      Roles:
+        - Ref: IAMRole
+  CWE:
+    Type: AWS::Events::Rule
+    Properties:
+      Description: !Sub ${AWS::StackName}
+      EventPattern:
+        source:
+          - aws.sts
+
+        detail-type:
+          - AWS API Call via CloudTrail
+        detail:
+          eventSource:
+            - sts.amazonaws.com
+          eventName:
+            - AssumeRole
+          requestParameters:
+            roleArn:
+              - !GetAtt IAMRole.Arn
+      Name: !Sub ${AWS::StackName}
+      State: ENABLED
+      Targets:
+        - Arn: !Ref SNS
+          Id: "TargetFunctionV1"
+  SNS:
+    # SNS Topic for CloudWatch Alarms and other testing
+    Type: AWS::SNS::Topic
+    Properties:
+      TopicName: !Sub ${AWS::StackName}
+      Subscription:
+        - Endpoint: !Ref email
+          Protocol: email
+  EventTopicPolicy:
+    Type: 'AWS::SNS::TopicPolicy'
+    Properties:
+      PolicyDocument:
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: events.amazonaws.com
+            Action: 'sns:Publish'
+            Resource: '*'
+      Topics:
+        - !Ref SNS
+Outputs:
+  IAMRoleArn:
+    Description: IAMRoleArn
+    Value: !GetAtt IAMRole.Arn
