@@ -1,0 +1,54 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: example role
+Parameters:
+  SharedAccountId:
+    Description: example role
+    Type: String
+Resources:
+  IAMRole:
+    Type: AWS::IAM::Role
+    Description: Central Role for Heartbeat
+    Properties:
+      RoleName: josjaf
+      Path: "/example/"
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - "lambda.amazonaws.com"
+            Action: 'sts:AssumeRole'
+          - Effect: Allow
+            Principal:
+              AWS:
+                - !Sub "arn:aws:iam::${AWS::AccountId}:root"
+                - !Sub "arn:aws:iam::${SharedAccountId}:root"
+
+
+            Action: 'sts:AssumeRole'
+
+  RolePolicies:
+    Type: AWS::IAM::Policy
+    Properties:
+      PolicyName: !Sub ${AWS::StackName}
+      PolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Sid: Logs
+            Effect: Allow
+            Action:
+              - logs:CreateLogGroup
+              - logs:CreateLogStream
+              - logs:GetLogEvents
+              - logs:PutLogEvents
+            Resource: "*"
+
+      Roles:
+        - Ref: IAMRole
+Outputs:
+  IAMRole:
+    Value: !Ref IAMRole
+    Description: Table name of the newly created DynamoDB table
+    Export:
+      Name: josjaf-role-arn
