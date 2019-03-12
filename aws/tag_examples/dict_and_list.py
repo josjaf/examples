@@ -3,7 +3,9 @@ tags_from_api = [{'Key': 'Application',
                  {'Key': 'Name', 'Value': 'example.com'},
                  {'Key': 'Type', 'Value': 'DevOps'}]
 
+# filter out tags that start with aws
 
+tags_from_api = [x for x in tags_from_api if not x.get("Key", "None").startswith('aws:')]
 def dict_to_tags(tags_dict):
     tags = [{"Key": k, "Value": v} for k, v in tags_dict.items()]
     return tags
