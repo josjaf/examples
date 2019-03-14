@@ -1,7 +1,8 @@
 tags_from_api = [{'Key': 'Application',
                   'Value': 'examples'},
                  {'Key': 'Name', 'Value': 'example.com'},
-                 {'Key': 'Type', 'Value': 'DevOps'}]
+                 {'Key': 'Type', 'Value': 'DevOps'},
+                 {'Key': 'aws:', 'Value': 'stack1'}]
 
 # filter out tags that start with aws
 
@@ -20,3 +21,4 @@ flat = aws_tags_to_dict(tags_from_api)
 print(f"Flat: {flat}")
 expanded = dict_to_tags(flat)
 print(f"Expanded: {expanded}")
+
