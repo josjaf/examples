@@ -1,22 +1,18 @@
 """
 Run this from the org master account, assuming that it is the default profile, will loop through the org and make a credentials file for the entire org with the account numbers as the profile name using a built in assume role
 """
-import os
 import configparser
-import boto3
+import os
 from pathlib import Path
-from helpers import helpers
 
-
-
-
+import boto3
 
 
 def main():
-    Helpers = helpers.Helpers()
     session = boto3.session.Session()
-    org_accounts = Helpers.get_org_accounts(session)
-    profiles = []
+    org_client = session.client('organizations')
+    response = org_client.list_accounts()
+    org_accounts = [a['Id'] for a in response['Accounts']]
     config = configparser.ConfigParser()
     for account in org_accounts:
         config[account] = {}
@@ -38,6 +34,7 @@ def main():
     full_path = home.joinpath('.aws/credentials1')
     with open(full_path, 'w') as configfile:
         config.write(configfile)
+    print("vim ~/.aws/credentials1")
     return
 
 
