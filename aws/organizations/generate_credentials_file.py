@@ -11,8 +11,11 @@ import boto3
 def main():
     session = boto3.session.Session()
     org_client = session.client('organizations')
+    sts = session.client('sts')
+    org_master_account_id = sts.get_caller_identity()['Account']
     response = org_client.list_accounts()
     org_accounts = [a['Id'] for a in response['Accounts']]
+    org_accounts.remove(org_master_account_id)
     config = configparser.ConfigParser()
     for account in org_accounts:
         config[account] = {}
