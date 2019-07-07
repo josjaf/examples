@@ -15,7 +15,7 @@ def main():
     # TODO add exception processing for requests.exceptions.ConnectionError when docker dameon is not running
     #buildtime = t.strftime("%m-%d-%Y %H:%M:%S")
     # commenting out the docker_build time, because it will always generate a new image, but not take up more disks apce
-    labels = {'Maintainer': 'josjaf', 'commit': sha}
+    labels = {'Maintainer': 'josjaf'}
     response = docker_client.images.build(path='.', tag='example:latest', labels=labels, dockerfile='Dockerfile')
     container_build_time = datetime.datetime.now() - t
     print(f"Rebuilding the container took: {container_build_time}")
