@@ -1,6 +1,13 @@
+terraform {
+  required_version = ">= 0.12"
+}
+
+
 provider "aws" {
   region = "us-east-1"
 }
+
+
 
 # # bucket cannot be a variable
 # # dynamodb cannot be a variable
@@ -13,3 +20,9 @@ terraform {
   }
 }
 
+
+
+module "lambda_example" {
+  source = "./lambda_example"
+
+}
