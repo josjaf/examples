@@ -1,8 +1,8 @@
 resource "aws_iam_role" "lambda_role" {
-  name = "example-lambda"
+  name                 = "example-lambda"
   max_session_duration = 3600
-  description = "example Lambda Role"
-  assume_role_policy = <<EOF
+  description          = "example Lambda Role"
+  assume_role_policy   = <<EOF
 {
   "Version": "2008-10-17",
   "Statement": [
@@ -16,11 +16,14 @@ resource "aws_iam_role" "lambda_role" {
     }
   ]
 }
-    EOF
+    
+EOF
+
 }
+
 resource "aws_iam_role_policy" "example_lambda_policy" {
   name = "example_lambda_permissions"
-  role = "${aws_iam_role.lambda_role.id}"
+  role = aws_iam_role.lambda_role.id
 
   policy = <<EOF
 {
@@ -46,6 +49,6 @@ resource "aws_iam_role_policy" "example_lambda_policy" {
   ]
 }
 EOF
-}
 
+}
 
