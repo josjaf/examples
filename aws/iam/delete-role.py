@@ -23,13 +23,13 @@ for role in roleNames:
     )
 
     for policy in response['AttachedPolicies']:
-        if policy['PolicyName'] == 'RoleQuarantinePolicy':
-            response = iam.detach_role_policy(
-                RoleName=role,
-                PolicyArn=policy['PolicyArn']
-            )
-            print(response)
+        response = iam.detach_role_policy(
+            RoleName=role,
+            PolicyArn=policy['PolicyArn']
+        )
+        print(response)
 for role in roleNames:
+    print(f"Deleting Role: {RoleName}")
     response = iam.delete_role(RoleName=role)
     print(response)
     #print("Role: {} Policies: {}".format(role,response['AttachedPolicies']))
