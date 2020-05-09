@@ -1,9 +1,10 @@
 import boto3
+import sys
 iam = boto3.client('iam')
 
 response = iam.list_roles()
 
-roleNames = ['SJ-Test2']
+roleNames = sys.argv[1].split(",")
 
 for role in roleNames:
     response = iam.list_role_policies(
@@ -29,7 +30,7 @@ for role in roleNames:
         )
         print(response)
 for role in roleNames:
-    print(f"Deleting Role: {RoleName}")
+    print(f"Deleting Role: {role}")
     response = iam.delete_role(RoleName=role)
     print(response)
     #print("Role: {} Policies: {}".format(role,response['AttachedPolicies']))
