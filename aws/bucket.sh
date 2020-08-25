@@ -1,5 +1,5 @@
 #!/bin/bash
-bucket=josjaf-examples
+bucket=josjaf-$RANDOM
 region=us-east-1
 aws s3 mb s3://$bucket --region $region
 aws s3api put-bucket-versioning --bucket $bucket --versioning-configuration Status=Enabled --region $region
