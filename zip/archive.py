@@ -2,6 +2,7 @@ import os
 from pathlib import Path
 from io import BytesIO
 from zipfile import ZipFile
+# go up one dir
 os.chdir('../')
 directory = Path.cwd()
 zip_path = Path.cwd().joinpath("archive.zip")
