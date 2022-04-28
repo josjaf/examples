@@ -19,7 +19,7 @@ def in_memory_zip(directory: Path, working_directory='../'):
             zip_archive.writestr(file1, file_path.read_bytes())
     return archive
 if __name__ == '__main__':
-    directory = Path.cwd()
+    directory = Path.cwd().parent
     archive = in_memory_zip(directory, '../')
     with open('config1.zip', 'wb') as f:
         f.write(archive.getbuffer())
